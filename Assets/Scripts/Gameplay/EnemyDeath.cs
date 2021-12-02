@@ -19,4 +19,20 @@ namespace Platformer.Gameplay
                 enemy._audio.PlayOneShot(enemy.ouch);
         }
     }
+    
+    /// <summary>
+    /// Fired when a hazard in the environment collides with a player and should be destroyed.
+    /// </summary>
+    /// <typeparam name="DestroyHazard"></typeparam>
+    public class DestroyHazard : Simulation.Event<DestroyHazard>
+    {
+        public EnvironmentHazard hazard;
+
+        public override void Execute()
+        {
+            hazard._collider.enabled = false;
+            if (hazard._audio && hazard.collisionSound)
+                hazard._audio.PlayOneShot(hazard.collisionSound);
+        }
+    }
 }

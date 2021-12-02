@@ -1,8 +1,11 @@
+using System.Numerics;
 using Platformer.Core;
 using Platformer.Mechanics;
 using Platformer.Model;
 using UnityEngine;
 using static Platformer.Core.Simulation;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Platformer.Gameplay
 {
@@ -58,6 +61,41 @@ namespace Platformer.Gameplay
                 Debug.Log("You should get smaller");
             }
             player.transform.localScale += scaleChangeEnemy;
+        }
+    }
+
+    /// <summary>
+    /// Fired when a Player collides with a Hazard.
+    /// </summary>
+    /// <typeparam name="HazardCollision"></typeparam>
+    public class PlayerHazardCollision : Event<PlayerEnemyCollision>
+    {
+        public bool destroyOnContact;
+        public bool shrinkPlayer = true;
+        public EnvironmentHazard hazard;
+        public PlayerController player;
+        public Vector3 scaleChangeEnemy;
+        public override void Execute()
+        {
+            Debug.Log($"Player Collided with Hazard:{hazard.name}");
+            if (shrinkPlayer)
+            {
+                if (scaleChangeEnemy == Vector3.zero)
+                    scaleChangeEnemy = new Vector2(-.2f, -.2f);
+                Debug.Log($"Shrinking player by {scaleChangeEnemy}");
+            }
+            else
+            {
+                if (scaleChangeEnemy == Vector3.zero)
+                    scaleChangeEnemy = new Vector2(.2f, .2f);
+                Debug.Log($"Increasing player size by {scaleChangeEnemy}");
+            }
+            player.transform.localScale += scaleChangeEnemy;
+            if (destroyOnContact)
+            {
+                Debug.Log($"Destroying Hazzard: {hazard.name}");
+                Schedule<DestroyHazard>().hazard = hazard;
+            }
         }
     }
 }

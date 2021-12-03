@@ -78,7 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorUp: 0
   colorDown: 0
-  material: []
+  materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   x_mat: 0
 --- !u!212 &212064061491315838
 SpriteRenderer:

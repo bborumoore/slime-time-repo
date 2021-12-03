@@ -6,12 +6,16 @@ using static Platformer.Core.Simulation;
 
 namespace Platformer.Mechanics
 {
+
+    public enum TokenColor{red, blue, green, none};
+
     /// <summary>
     /// This class contains the data required for implementing token collection mechanics.
     /// It does not perform animation of the token, this is handled in a batch by the 
     /// TokenController in the scene.
     /// </summary>
     [RequireComponent(typeof(Collider2D))]
+    
     public class TokenInstance : MonoBehaviour
     {
         public AudioClip tokenCollectAudio;
@@ -31,8 +35,9 @@ namespace Platformer.Mechanics
         //active frame in animation, updated by the controller.
         internal int frame = 0;
         internal bool collected = false;
-        internal Material[] playerMaterials;
-        internal GameObject colorScript;
+        public Material mat;
+        
+        public TokenColor tokenColor = TokenColor.none;
 
         void Awake()
         {
@@ -41,8 +46,6 @@ namespace Platformer.Mechanics
                 frame = Random.Range(0, sprites.Length);
             sprites = idleAnimation;
             scaleChange = new Vector2(0.05f, 0.05f);
-            colorScript = GameObject.Find("PlayerColorSystem");
-            //playerMaterials = colorScript.Material[];
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -54,16 +57,13 @@ namespace Platformer.Mechanics
 
         void OnPlayerEnter(PlayerController player)
         {
-            if(this.tag =="Green")
-            {  
-                player.spriteRenderer.color = new Color(0, 1, 0, 1);
-            } else if(this.tag =="Red")
-            {  
-                player.spriteRenderer.color = new Color(1, 0, 0, 1);
-            } else if(this.tag =="Blue")
-            {  
-                player.spriteRenderer.color = new Color(0, 0, 1, 1);
+            if(this.tokenColor != TokenColor.none)
+            {
+            var ColorScript = player.GetComponent<PlayerColorSystem>();
+            ColorScript.AddMaterial(tokenColor, this.mat);
             }
+            
+            
             if (collected) return;
             //disable the gameObject and remove it from the controller update list.
             frame = 0;
@@ -76,5 +76,6 @@ namespace Platformer.Mechanics
             ev.player = player;
             player.transform.localScale += scaleChange;
         }
+
     }
 }

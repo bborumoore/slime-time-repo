@@ -1,5 +1,6 @@
 using Platformer.Gameplay;
 using UnityEngine;
+//using Platformer.Mechanics.PlayerColorSystem;
 using static Platformer.Core.Simulation;
 
 
@@ -30,6 +31,8 @@ namespace Platformer.Mechanics
         //active frame in animation, updated by the controller.
         internal int frame = 0;
         internal bool collected = false;
+        internal Material[] playerMaterials;
+        internal GameObject colorScript;
 
         void Awake()
         {
@@ -38,6 +41,8 @@ namespace Platformer.Mechanics
                 frame = Random.Range(0, sprites.Length);
             sprites = idleAnimation;
             scaleChange = new Vector2(0.05f, 0.05f);
+            colorScript = GameObject.Find("PlayerColorSystem");
+            //playerMaterials = colorScript.Material[];
         }
 
         void OnTriggerEnter2D(Collider2D other)

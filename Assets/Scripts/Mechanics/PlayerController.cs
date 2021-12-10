@@ -5,6 +5,7 @@ using Platformer.Gameplay;
 using static Platformer.Core.Simulation;
 using Platformer.Model;
 using Platformer.Core;
+using UnityEngine.SceneManagement;
 
 namespace Platformer.Mechanics
 {
@@ -55,6 +56,10 @@ namespace Platformer.Mechanics
 
         protected override void Update()
         {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
             if(tempLocalScale != this.transform.localScale.x)
             {
                 tempLocalScale = this.transform.localScale.x;

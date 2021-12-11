@@ -19,6 +19,9 @@ namespace Platformer.Mechanics
     public class TokenInstance : MonoBehaviour
     {
         public AudioClip tokenCollectAudio;
+
+        public GameObject UiController;
+
         [Tooltip("If true, animation will start at a random position in the sequence.")]
         public bool randomAnimationStartTime = false;
         [Tooltip("List of frames that make up the animation.")]
@@ -46,6 +49,7 @@ namespace Platformer.Mechanics
                 frame = Random.Range(0, sprites.Length);
             sprites = idleAnimation;
             scaleChange = new Vector2(0.05f, 0.05f);
+            UiController = GameObject.Find("UIController");
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -59,8 +63,9 @@ namespace Platformer.Mechanics
         {
             if(this.tokenColor != TokenColor.none)
             {
-            var ColorScript = player.GetComponent<PlayerColorSystem>();
-            ColorScript.AddMaterial(tokenColor, this.mat);
+                var ColorScript = player.GetComponent<PlayerColorSystem>();
+                ColorScript.AddMaterial(tokenColor, this.mat);
+                UiController.GetComponent<ControlGems>().AddGem(tokenColor);
             }
             
             

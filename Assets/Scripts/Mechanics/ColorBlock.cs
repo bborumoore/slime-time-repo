@@ -22,7 +22,6 @@ namespace Platformer.Mechanics
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            Debug.Log("Collided");
             if (collision.transform.tag == "Player")
             {
                 GameObject player = collision.transform.gameObject;
